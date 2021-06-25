@@ -25,7 +25,7 @@ class drawPile():
         numberOfJokers = 2
         numberOfEachTile = 2
         for i in range(1, highestValue + 1):
-            for j in range(0, numberOfEachTile):
+            for _ in range(0, numberOfEachTile):
                 self.drawPile.append(tile(i, 'R'))
                 self.drawPile.append(tile(i, 'B'))
                 self.drawPile.append(tile(i, 'Y'))
