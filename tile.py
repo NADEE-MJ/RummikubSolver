@@ -1,7 +1,7 @@
 class tile():
     def __init__(self, value, color):
         """
-        (self, char, int) -> tile 
+        (self, int, char) -> tile 
 
         Initializer for tile class.
         """
