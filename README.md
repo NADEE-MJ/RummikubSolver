@@ -1,2 +1,2 @@
-# Rummikub-Solver
+# RummikubSolver
 Text based Rummikub game and solver
