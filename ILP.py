@@ -1,6 +1,7 @@
 from itertools import combinations
 from group import group
 from tile import tile
+
 def generateNoJokerSet(highestNum, colors):
     noJokerSet = []
     for color in colors:
@@ -12,7 +13,7 @@ def generateNoJokerSet(highestNum, colors):
                 noJokerSet.append(group([tile(i-4, color), tile(i-3, color), tile(i-2, color), tile(i-1, color), tile(i, color)]))
     
     colorCombinationsList = []
-    for i in range(3, len(colors)):
+    for i in range(3, len(colors) + 1):
         colorCombinations = list(combinations(colors, i))
         colorCombinationsList.append(colorCombinations)
     for i in range(1, highestNum + 1):
