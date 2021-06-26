@@ -32,17 +32,20 @@ def generateOneJokerSet(noJokerSet):
         for i in range(0, len(party.group)):
             partyCopy = party.group[:]
             partyCopy[i] = tile(0, 'J')
-            oneJokerSet.append(partyCopy)
+            oneJokerSet.append(group(partyCopy))
     return oneJokerSet
 
 def generateTwoJokerSet(oneJokerSet):
     twoJokerSet = []
     for party in oneJokerSet:
-        for i in range(0, len(party)):
-            if party[i].color != 'J':
-                partyCopy = party[:]
+        for i in range(0, len(party.group)):
+            if party.group[i].color != 'J':
+                partyCopy = party.group[:]
                 partyCopy[i] = tile(0, 'J')
-                twoJokerSet.append(partyCopy)
+                try:
+                    twoJokerSet.append(group(partyCopy))
+                except:
+                    pass
     return twoJokerSet
 
 def generateSet(highestNum, colors):
@@ -54,4 +57,11 @@ def generateSet(highestNum, colors):
     bigSet.extend(twoJokerSet)
     return bigSet
 
-print(len(generateSet(13,['R','B','K','Y'])))
+# big_set = generateSet(13,['R','B','K','Y'])
+
+big_set = generateTwoJokerSet(generateOneJokerSet(generateNoJokerSet(13,['R','B','K','Y'])))
+
+for i in big_set:
+    print(*[x.cstring for x in i.group])
+
+print(len(big_set))
