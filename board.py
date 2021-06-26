@@ -20,7 +20,7 @@ class board():
             for i, boardGroup in enumerate(self.board):
                 print('Group {}: '.format(i), end=' ')
                 for el in boardGroup.group:
-                    print(el.string, end=' ')
+                    print(el.cstring, end=' ')
                 print('\n', end='')
             # print(*['Group {}: [{}]'.format(i,', '.join(boardGroup.group)) for i, boardGroup in enumerate(self.board)], sep='\n')
 
@@ -47,7 +47,7 @@ class board():
         print('SELECTED GROUPS TILES')
         for selectedGroup in self.selection:
             for el in selectedGroup.group:
-                print(el.string, end=' ')
+                print(el.cstring, end=' ')
         print('\n',end='')
 
         #print(*['[{}]'.format(', '.join(selectedGroup)) for selectedGroup in self.selection], sep='\n')
