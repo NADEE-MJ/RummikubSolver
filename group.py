@@ -1,5 +1,3 @@
-from tile import tile
-
 class GroupError(Exception):
     pass
 
