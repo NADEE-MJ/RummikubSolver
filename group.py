@@ -79,51 +79,30 @@ class group():
                     continue
                 else:
                     raise GroupError
-
-            #finds first number in a run
-            jokerCount = 0
-            for tile in self.group:
-                if tile.value != 0:
-                    tempNum = tile.value - jokerCount - 1
-                    break
-                else:
-                    jokerCount += 1
-
-            #checks each tile in a run is sequential
+            
             numbersInGroup = []
-            for tile in self.group:
-                if tile.value == tempNum + 1 or tile.value == 0:
-                    if tile.value > 0:
-                        tempNum = tile.value
-                        numbersInGroup.append(tempNum)
-                    else:
-                        tempNum += 1
-                        numbersInGroup.append(0)
+            consJoker = 0
+            currNum = 0
+
+            if self.group[0].value == 0:
+                consJoker += 1
+            else:
+                currNum = self.group[0].value
+
+            for i in range(1, len(self.group)):
+                if self.group[i].value == 0:
+                    consJoker += 1
+                    if curr_num + consJoker > 13:
+                        raise InvalidJokerError
                 else:
-                    raise RunError
+                    if consJoker > 0 and self.group[i].value - consJoker < 1:
+                        raise InvalidJokerError
+                    if currNum == 0:
+                        currNum = self.group[i].value
+                    else:
+                        if self.group[i].value - consJoker - 1 != self.group[i - 1 - consJoker].value:
+                            raise RunError
+                        currNum = self.group[i].value
 
-            #count the number of jokers in the run
-            jokerCount = 0
-            for tile in self.group:
-                if tile.value == 0:
-                    jokerCount += 1
+                    cons_joker = 0
 
-            #check if there is a joker at the left or right of a run
-            if jokerCount == 1:
-                if 1 in numbersInGroup and self.group[0] != 1:
-                    raise InvalidJokerError
-                if 13 in numbersInGroup and self.group[-1] != 13:
-                    raise InvalidJokerError
-
-            elif jokerCount == 2:
-                if 1 in numbersInGroup and self.group[0] != 1:
-                    raise InvalidJokerError
-                if 2 in numbersInGroup and self.group[2] == 2:
-                    raise InvalidJokerError
-                if 12 in numbersInGroup and self.group[-3] == 12:
-                    raise InvalidJokerError
-                if 13 in numbersInGroup and self.group[-1] != 13:
-                    raise InvalidJokerError
-
-        else:
-            raise GroupError
