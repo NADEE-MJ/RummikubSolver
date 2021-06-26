@@ -28,6 +28,13 @@ def goingOutSolver(solverHand):
         if currTile[0] == temp and currTile[1] not in addedColors and len(tempGroup) < 5:
             tempGroup.append(currTile)
             addedColors.append(currTile[1])
+            if len(tempGroup) == 4:
+                tempOutGroups.append(tempGroup)
+                for tileToRemove in tempGroup:
+                    currHand.remove(tileToRemove)
+                temp = 0
+                tempGroup = []
+                addedColors = []
         elif len(tempGroup) == 2 and (currTile[0] != temp and temp >= 10) and jokerCount >= 1:
             temp = currTile[0]
             tempGroup = []
@@ -49,7 +56,7 @@ def goingOutSolver(solverHand):
     temp = 0
     tempGroup = []
     currColor = ''
-    #orders currhand by value descending and then by color
+    #orders currhand by value descending and then by color not accouting for jokers
     currHand.sort(reverse=True)
     currHand.sort(key=takeSecond)
     for currTile in currHand:

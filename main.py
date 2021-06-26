@@ -43,7 +43,7 @@ Jokers or J0 = has no value\n"""
         elif numPlayers == 'solver':
             os.system('cls' if os.name == 'nt' else 'clear')
             print("CHEAT CODE ENTERED\nRunning solver....")
-            # time.sleep(2)
+            #time.sleep(2)
             solver = hand(drawPile(), -1, True)
 
             boardInputed = False
