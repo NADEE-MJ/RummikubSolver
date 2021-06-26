@@ -5,8 +5,6 @@ def takeSecond(elem):
     return elem[1]
 
 def goingOutSolver(solverHand):
-    outGroups = []
-    outGroupsValue = 0
     currHand = []
     jokerCount = 0
     for currTile in solverHand:
@@ -16,10 +14,28 @@ def goingOutSolver(solverHand):
     
     #orders currHand by value descending
     currHand.sort(reverse=True)
+    
+    tempOutGroups = setCheck(currHand)
 
-    #check for any sets starting from end of currHand if you have two tiles over value 10
-    #and a joker then the solver will add the joker to that group
-    #possible to go out if you have J 9 9 and then another set or run
+    #orders currhand by value descending and then by color not accouting for jokers
+    currHand.sort(reverse=True)
+    currHand.sort(key=takeSecond)
+
+    tempOutGroups += runCheck(currHand)
+
+    outGroups, tilesToRemove = convertToListOfGroups(tempOutGroups)
+
+    outGroupsValue = calculateOutGroupsValue(outGroups)
+    
+    #check if outGroups is worth 30 points
+    if outGroupsValue >= 30:
+        return outGroups, tilesToRemove
+    else:
+        print("Not able to go out.")
+        return None, None
+
+def setCheck(currHand):
+    #check for any sets starting from end of currHand
     temp = 0
     tempGroup = []
     tempOutGroups = []
@@ -35,30 +51,33 @@ def goingOutSolver(solverHand):
                 temp = 0
                 tempGroup = []
                 addedColors = []
-        elif len(tempGroup) == 2 and (currTile[0] != temp and temp >= 10) and jokerCount >= 1:
-            temp = currTile[0]
-            tempGroup = []
-            addedColors = []
-            tempGroup.append([O, 'J'])
-            jokerCount -= 1
-        else:
-            if len(tempGroup) >= 3:
-                tempOutGroups.append(tempGroup)
-                for tileToRemove in tempGroup:
-                    currHand.remove(tileToRemove)
-            temp = currTile[0]
-            tempGroup = []
-            addedColors = []
-            tempGroup.append(currTile)
-            addedColors.append(currTile[1])
+            #joker case will rewrite later
+            # elif len(tempGroup) == 2 and (currTile[0] != temp and temp >= 10) and jokerCount >= 1:
+            #     temp = currTile[0]
+            #     tempGroup = []
+            #     addedColors = []
+            #     tempGroup.append([O, 'J'])
+            #     jokerCount -= 1
+            else:
+                if len(tempGroup) >= 3:
+                    tempOutGroups.append(tempGroup)
+                    for tileToRemove in tempGroup:
+                        currHand.remove(tileToRemove)
+                temp = currTile[0]
+                tempGroup = []
+                addedColors = []
+                tempGroup.append(currTile)
+                addedColors.append(currTile[1])
 
+    return tempOutGroups
+
+def runCheck(currHand):
     #checks for runs
     temp = 0
     tempGroup = []
+    tempOutGroups =[]
     currColor = ''
-    #orders currhand by value descending and then by color not accouting for jokers
-    currHand.sort(reverse=True)
-    currHand.sort(key=takeSecond)
+    
     for currTile in currHand:
         if currTile[0] < temp and currTile[1] == currColor:
             tempGroup.append(currTile)
@@ -73,10 +92,14 @@ def goingOutSolver(solverHand):
             tempGroup = []
             temp = currTile[0]
             currColor = currTile[1]
+    
+    return tempOutGroups
 
+def convertToListOfGroups(tempOutGroups):
     #converts list of list of lists to list of groups
     tempGroup = []
     tilesToRemove = []
+    outGroups = []
     for currGroup in tempOutGroups:
         for currTile in currGroup:
             tempTile = tile(currTile[0], currTile[1])
@@ -99,17 +122,15 @@ def goingOutSolver(solverHand):
         
         except InvalidJokerError:
             print("That is not a valid spot for a joker")
+    
+    return outGroups, tilesToRemove
 
-
+def calculateOutGroupsValue(outGroups):
     #calculates outGroups value
+    outGroupsValue = 0
     for currGroup in outGroups:
         for currTile in currGroup.group:
             if currTile.value != 0:
                 outGroupsValue += currTile.value
-
-    #check if outGroups is worth 30 points
-    if outGroupsValue >= 30:
-        return outGroups, tilesToRemove
-    else:
-        print("Not able to go out.")
-        return None, None
+    
+    return outGroupsValue
