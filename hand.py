@@ -40,9 +40,8 @@ class hand():
 
         tempList = userInput.split(" ")
         newHand = []
-        for i in tempList:
-            for j in i:
-                tempTile = tile(int(j[1:]), j[0])
+        for el in tempList:
+                tempTile = tile(int(el[1:]), el[0])
                 newHand.append(tempTile)
 
         self.hand = newHand
@@ -60,9 +59,11 @@ class hand():
         '''
         Print out tiles in hand separated by tabs
         '''
-        printable = []
         count = 0
-        print("\nPlayer {} Hand\n".format(self.playerNum + 1))
+        if self.playerNum == -1:
+            print("Solver Hand\n")
+        else:
+            print("\nPlayer {} Hand\n".format(self.playerNum + 1))
         for handTile in self.hand:
             if count % 5 == 0 and count > 0:
                 print("\n")

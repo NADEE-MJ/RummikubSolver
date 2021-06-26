@@ -43,20 +43,24 @@ Jokers or J0 = has no value\n"""
             os.system('cls' if os.name == 'nt' else 'clear')
             print("CHEAT CODE ENTERED\nRunning solver....")
             time.sleep(2)
-            solver = hand(drawPile(), 0, True)
+            solver = hand(drawPile(), -1, True)
 
+            boardInputed = False
             while True:
-                
-                solverBoard = input("Enter your board in the following format: (R1 R2 R3 | R4 B4 Y4) ")
                 
                 for i in range(106):
                     solver.draw(d)
                 
-                boardTiles = solver.validateInput(solverBoard, True)
-                if boardTiles == 0:
-                    continue
-                else:
-                    b.addGroups(boardTiles)
+                if not boardInputed:
+                    solverBoard = input("Enter your board in the following format: (R1 R2 R3 | R4 B4 Y4) ")
+                    boardTiles = solver.validateInput(solverBoard, True)
+
+                    if boardTiles == 0:
+                        continue
+                    else:
+                        b.addGroups(boardTiles)
+                        boardInputed = True
+                
                 b.displayBoard()
                 
                 solver.resetHand(d)
@@ -65,6 +69,7 @@ Jokers or J0 = has no value\n"""
                 if handTiles == 0:
                     continue
                 else:
+                    solver.displayHand()
                     break
                     #run solver here
             break
