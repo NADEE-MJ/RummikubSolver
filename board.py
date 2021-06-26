@@ -18,6 +18,7 @@ class board():
         add a group to the board
         '''
         self.board.extend(groups)
+        self.selection = []
 
 
     def removeGroups(self, groups):
