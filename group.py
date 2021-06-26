@@ -25,15 +25,7 @@ class group():
         self.group = group
         self.groupValidity()
 
-    def groupValidity(self):
-        """
-        () -> Exception?
-
-        Checks whether group is valid based on the constraints of a either a set or run. If
-        the group conforms to a set or run then no exception is raised, otherwise a specific
-        exception is raised.
-        """
-
+    def checkSet(self):
         #check at least 3 tiles in group and less than 13 tiles in group
         if len(self.group) >= 3 + len(self.group) <= 13:
             #set check (same number)
@@ -79,30 +71,42 @@ class group():
                     continue
                 else:
                     raise GroupError
-            
-            numbersInGroup = []
-            consJoker = 0
-            currNum = 0
 
-            if self.group[0].value == 0:
+    def checkRun(self):
+        numbersInGroup = []
+        consJoker = 0
+        currNum = 0
+
+        if self.group[0].value == 0:
+            consJoker += 1
+        else:
+            currNum = self.group[0].value
+
+        for i in range(1, len(self.group)):
+            if self.group[i].value == 0:
                 consJoker += 1
+                if curr_num + consJoker > 13:
+                    raise InvalidJokerError
             else:
-                currNum = self.group[0].value
-
-            for i in range(1, len(self.group)):
-                if self.group[i].value == 0:
-                    consJoker += 1
-                    if curr_num + consJoker > 13:
-                        raise InvalidJokerError
+                if consJoker > 0 and self.group[i].value - consJoker < 1:
+                    raise InvalidJokerError
+                if currNum == 0:
+                    currNum = self.group[i].value
                 else:
-                    if consJoker > 0 and self.group[i].value - consJoker < 1:
-                        raise InvalidJokerError
-                    if currNum == 0:
-                        currNum = self.group[i].value
-                    else:
-                        if self.group[i].value - consJoker - 1 != self.group[i - 1 - consJoker].value:
-                            raise RunError
-                        currNum = self.group[i].value
+                    if self.group[i].value - consJoker - 1 != self.group[i - 1 - consJoker].value:
+                        raise RunError
+                    currNum = self.group[i].value
 
-                    cons_joker = 0
+                cons_joker = 0
 
+
+    def groupValidity(self):
+        """
+        () -> Exception?
+
+        Checks whether group is valid based on the constraints of a either a set or run. If
+        the group conforms to a set or run then no exception is raised, otherwise a specific
+        exception is raised.
+        """
+        self.checkSet()
+        self.checkRun()
