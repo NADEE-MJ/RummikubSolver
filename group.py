@@ -101,14 +101,6 @@ class group():
                         numbersInGroup.append(0)
                 else:
                     raise RunError
-            
-            #Tenshis way
-            for i in range(1, len(self.group)):
-                if self.group[i] > self.group[i - 1] or self.group[i] == 0:
-                    if self.group[i] != 0:
-                        numbersInGroup.append(self.group[i])
-                    else:
-                        numbersInGroup.append(0)
 
             #count the number of jokers in the run
             jokerCount = 0
