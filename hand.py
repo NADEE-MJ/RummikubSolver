@@ -1,7 +1,7 @@
 from tile import tile
 from group import GroupError, InvalidJokerError, RunError, SetError, UniqueColorError, group
 class hand():
-    def __init__(self, drawPile, playerNum):
+    def __init__(self, drawPile, playerNum, customHand):
         '''
         Initialize a hand. Hand is a list that contains tiles
         '''
@@ -10,7 +10,8 @@ class hand():
         self.playedTiles = False
         self.goneOut = False
         self.hasWon = False
-        self.initialDraw(drawPile)
+        if not customHand:
+            self.initialDraw(drawPile)
     
     def draw(self, drawPile):
         '''
@@ -28,6 +29,25 @@ class hand():
         for i in range(standardHand):
             self.draw(drawPile)
     
+    def resetHand(self, drawPile):
+        self.hand = []
+        drawPile.currentTile = 0
+
+    def addCustomHand(self, userInput):
+        if userInput == "":
+            print('No groups submitted. Try again')
+            return 0
+
+        tempList = userInput.split(" ")
+        newHand = []
+        for i in tempList:
+            for j in i:
+                tempTile = tile(int(j[1:]), j[0])
+                newHand.append(tempTile)
+
+        self.hand = newHand
+        
+
     # def displayHand(self):
     #     # print out hand using list comprehension (better)
     #     '''

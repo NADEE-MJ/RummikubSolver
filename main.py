@@ -3,6 +3,7 @@ from drawpile import drawPile
 from board import board
 from group import group
 import os
+import time
 
 def main():
     d = drawPile()
@@ -36,15 +37,37 @@ Jokers or J0 = has no value\n"""
         numPlayers = input("How many people are playing? (2, 3, or 4) ")
 
         if numPlayers in ['2', '3', '4']:
-            players = [hand(d, i) for i in range(int(numPlayers))]
+            players = [hand(d, i, False) for i in range(int(numPlayers))]
 
-        # elif numPlayers == 'solver':
-        #     print("Nice try hacker!")
-        #     b.board = input("Enter your board in the following format: ([[..,..]]) Ex: [[R1, R2, R3],  [R1, B1, Y1, G1]] ")
-            
-        #     h1 = hand()
-        #     h1.hand = input("Enter your hand in the following format: ([..,..]) Ex: [R1, B1, Y1, G1] ")
-        #     break
+        elif numPlayers == 'solver':
+            os.system('cls' if os.name == 'nt' else 'clear')
+            print("CHEAT CODE ENTERED\nRunning solver....")
+            time.sleep(2)
+            solver = hand(drawPile(), 0, True)
+
+            while True:
+                
+                solverBoard = input("Enter your board in the following format: (R1 R2 R3 | R4 B4 Y4) ")
+                
+                for i in range(106):
+                    solver.draw(d)
+                
+                boardTiles = solver.validateInput(solverBoard, True)
+                if boardTiles == 0:
+                    continue
+                else:
+                    b.addGroups(boardTiles)
+                b.displayBoard()
+                
+                solver.resetHand(d)
+                solverHand = input("Enter your hand in the following format: (R1 R2 R3) ")
+                handTiles = solver.addCustomHand(solverHand)
+                if handTiles == 0:
+                    continue
+                else:
+                    break
+                    #run solver here
+            break
 
         else:
             print('\n"{}" is not valid input! Please input 2, 3, or 4!'.format(numPlayers))
@@ -80,13 +103,14 @@ Jokers or J0 = has no value\n"""
 
                             if addingTiles == 0:
                                 b.reinsertSelection()
-                                if player.hasWon:
-                                    print("Player {} has won!".format(player.playerNum))
-                                    gameOver = True
-                                    break
                                 continue
                             else:
                                 b.addGroups(addingTiles)
+                                if player.hasWon:
+                                    b.displayBoard()
+                                    print("Player {} has won!".format(player.playerNum))
+                                    gameOver = True
+                                    break
                                 player.playedTiles = True
                         else:
                             #go out
@@ -108,6 +132,7 @@ Jokers or J0 = has no value\n"""
                         break
                     elif userChoice == '3':
                         #solver
+                        #NEED TO CREATE SOLVER FIRST
                         os.system('cls' if os.name == 'nt' else 'clear')
                         pass
                     else:
@@ -125,7 +150,7 @@ Jokers or J0 = has no value\n"""
 
         elif playAgain in ['n', 'N']:       
             break
-        
+
         else:
             print("That is not valid input try again!")
 
