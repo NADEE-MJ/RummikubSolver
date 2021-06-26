@@ -37,6 +37,25 @@ class hand():
         self.hand = []
         drawPile.currentTile = 0
 
+    def removeItemsFromHand(self, tilesAddedToBoard):
+        currHand = self.hand[:]
+        TilesToRemove = []
+        tempHand = []
+        for currTile in tilesAddedToBoard:
+            TilesToRemove.append([currTile.value, currTile.color])
+
+        for currTile in currHand:
+            tempHand.append([currTile.value, currTile.color])
+        
+        for currTile in TilesToRemove:
+            tempHand.remove(currTile)
+
+        currHand = []
+        for currTile in tempHand:
+            currHand.append(tile(currTile[0], currTile[1]))
+        
+        self.hand = currHand
+
     def addCustomHand(self, userInput):
         if userInput == "":
             print('No groups submitted. Try again')
