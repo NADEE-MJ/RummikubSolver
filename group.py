@@ -122,7 +122,7 @@ class group():
         """
         #check at least 3 tiles in group and less than 13 tiles in group
         if len(self.group) >= 3 + len(self.group) <= 13:
-            self.isSet()
-            self.isRun()
+            if not self.isSet():
+                self.isRun()
         else:
             raise GroupError

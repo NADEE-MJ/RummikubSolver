@@ -4,6 +4,9 @@ from board import board
 from group import group
 import os
 
+def checkInput(userInput, hand):
+    
+
 def main():
     d = drawPile()
     b = board()
@@ -49,7 +52,7 @@ Jokers or J0 = has no value\n"""
             continue
 
     os.system('cls' if os.name == 'nt' else 'clear')
-    
+
     while True:
         for player in players:
             while True:
@@ -58,7 +61,12 @@ Jokers or J0 = has no value\n"""
                 userChoice = input(menu)
                 if userChoice == '1':
                     os.system('cls' if os.name == 'nt' else 'clear')
-                    pass
+                    if player.goneOut == True:
+                        pass
+                    else:
+                        print("In order to start playing pieces on the board you need to go out, 30 points are required to do so.")
+                        userInput = input("Enter sets and runs from your hand in the following format: ([R1, R2, R3] [R4, B4, Y4]) ")
+                        checkInput(userInput, player.hand)
                 elif userChoice == '2':
                     os.system('cls' if os.name == 'nt' else 'clear')
                     pass

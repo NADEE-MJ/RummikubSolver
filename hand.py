@@ -5,6 +5,7 @@ class hand():
         '''
         self.hand = []
         self.player = player
+        self.goneOut = False
         self.initialDraw(drawPile)
     
     def draw(self, drawPile):
