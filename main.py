@@ -4,9 +4,6 @@ from board import board
 from group import group
 import os
 
-def checkInput(userInput, hand):
-    
-
 def main():
     d = drawPile()
     b = board()
@@ -55,6 +52,7 @@ Jokers or J0 = has no value\n"""
 
     while True:
         for player in players:
+            player.playedTiles = False
             while True:
                 b.displayBoard()
                 player.displayHand()
@@ -62,15 +60,48 @@ Jokers or J0 = has no value\n"""
                 if userChoice == '1':
                     os.system('cls' if os.name == 'nt' else 'clear')
                     if player.goneOut == True:
-                        pass
+                        #add to board
+                        os.system('cls' if os.name == 'nt' else 'clear')
+                        b.displayBoard()
+                        player.displayHand()
+                        userInput = input('Enter the group numbers you want to use: ')
+                        os.system('cls' if os.name == 'nt' else 'clear')
+                        if not userInput == '':
+                            b.makeSelection(userInput)
+                            player.displayHand()
+                            userInput = input("Enter sets and runs from your hand and groups in the following format: (R1 R2 R3 | R4 B4 Y4) ")
+                            addingTiles = player.validateInput(userInput, player.goneOut, b.selection)
+                        else:
+                            player.displayHand()
+                            userInput = input("Enter sets and runs from your hand in the following format: (R1 R2 R3 | R4 B4 Y4) ")
+                            addingTiles = player.validateInput(userInput, player.goneOut)
+
+                        if addingTiles == 0:
+                            b.reinsertSelection()
+                            continue
+                        else:
+                            b.addGroups(addingTiles)
+                            player.playedTiles = True
                     else:
+                        #go out
+                        player.displayHand()
                         print("In order to start playing pieces on the board you need to go out, 30 points are required to do so.")
-                        userInput = input("Enter sets and runs from your hand in the following format: ([R1, R2, R3] [R4, B4, Y4]) ")
-                        checkInput(userInput, player.hand)
+                        userInput = input("Enter sets and runs from your hand in the following format: (R1 R2 R3 | R4 B4 Y4) ")
+                        goingOut = player.validateInput(userInput, player.goneOut)
+                        if goingOut == 0:
+                            continue
+                        else:
+                            b.addGroups(goingOut)
+                            player.playedTiles = True
+                            player.goneOut = True
                 elif userChoice == '2':
+                    #end turn / draw
                     os.system('cls' if os.name == 'nt' else 'clear')
-                    pass
+                    if not player.playedTiles:
+                        player.draw(d)
+                    break
                 elif userChoice == '3':
+                    #solver
                     os.system('cls' if os.name == 'nt' else 'clear')
                     pass
                 else:

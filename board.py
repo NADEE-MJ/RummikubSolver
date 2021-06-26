@@ -17,7 +17,12 @@ class board():
         if len(self.board) == 0:
             print('The board is empty')
         else:
-            print(*['Group {}: [{}]'.format(i,', '.join(boardGroup)) for i, boardGroup in enumerate(self.board)], sep='\n')
+            for i, boardGroup in enumerate(self.board):
+                print('Group {}: '.format(i), end=' ')
+                for el in boardGroup.group:
+                    print(el.string, end=' ')
+                print('\n', end='')
+            # print(*['Group {}: [{}]'.format(i,', '.join(boardGroup.group)) for i, boardGroup in enumerate(self.board)], sep='\n')
 
     def addGroups(self,groups):
         '''
@@ -25,7 +30,6 @@ class board():
         '''
         self.board.extend(groups)
         self.selection = []
-
 
     def removeGroups(self, groups):
         '''
@@ -40,8 +44,13 @@ class board():
         '''
         self.selection = [self.board[int(i)] for i in selectionIndices.split(' ')]
         self.removeGroups(self.selection)
-        print('SELECTED GROUPS')
-        print(*['[{}]'.format(', '.join(selectedGroup)) for selectedGroup in self.selection], sep='\n')
+        print('SELECTED GROUPS TILES')
+        for selectedGroup in self.selection:
+            for el in selectedGroup.group:
+                print(el.string, end=' ')
+        print('\n',end='')
+
+        #print(*['[{}]'.format(', '.join(selectedGroup)) for selectedGroup in self.selection], sep='\n')
     
     def reinsertSelection(self):
         '''

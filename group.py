@@ -27,7 +27,7 @@ class group():
 
     def isSet(self):
         """
-        () -> Exception or False
+        () -> Exception or Bool
 
         Checks whether the group is valid based off of the constraints of a set. If
         set is invalid then an expection is raised.
@@ -59,6 +59,7 @@ class group():
                         raise UniqueColorError
                     else:
                         usedColors.append(tile.color)
+                return True
             else:
                 raise SetError
 
@@ -66,7 +67,7 @@ class group():
 
     def isRun(self):
         """
-        () -> Exception or False
+        () -> Exception?
 
         Checks whether the group is valid based off of the constraints of a Run. If
         Run is invalid then an expection is raised.
@@ -110,8 +111,6 @@ class group():
 
                 consJoker = 0
 
-        return False
-
     def groupValidity(self):
         """
         () -> Exception?
@@ -121,8 +120,16 @@ class group():
         specific exception is raised.
         """
         #check at least 3 tiles in group and less than 13 tiles in group
-        if len(self.group) >= 3 + len(self.group) <= 13:
+        if len(self.group) >= 3 and len(self.group) <= 13:
             if not self.isSet():
                 self.isRun()
         else:
             raise GroupError
+
+    def getGroupValue(self):
+        groupValue = 0
+        for tile in self.group:
+            groupValue += tile.value
+
+        return groupValue
+
