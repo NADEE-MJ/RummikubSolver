@@ -3,6 +3,7 @@ from hand import hand
 from drawpile import drawPile
 from board import board
 from group import group
+from tile import colors
 import os
 import time
 
@@ -19,12 +20,11 @@ MENU
 3. Solve
 Enter: """
 
-    colorKey = """Color Key:
-R = Red
-B = Blue
-Y = Yellow
-K = Black
-J = Joker\n"""
+    colorKey = f"Color Key:\n{colors.colorsDict['R']}R = Red \n\
+{colors.colorsDict['B']}B = Blue \n\
+{colors.colorsDict['Y']}Y = Yellow \n\
+{colors.colorsDict['K']}K = Black \n\
+{colors.colorsDict['E']}J = Joker\n"
 
     valueKey = """Value Key:
 1 - 13 = same value as number
