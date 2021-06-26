@@ -1,3 +1,4 @@
+from goingOutSolver import goingOutSolver
 from hand import hand
 from drawpile import drawPile
 from board import board
@@ -42,24 +43,22 @@ Jokers or J0 = has no value\n"""
         elif numPlayers == 'solver':
             os.system('cls' if os.name == 'nt' else 'clear')
             print("CHEAT CODE ENTERED\nRunning solver....")
-            time.sleep(2)
+            # time.sleep(2)
             solver = hand(drawPile(), -1, True)
 
             boardInputed = False
-            while True:
-                
-                for i in range(106):
+            for i in range(106):
                     solver.draw(d)
-                
+            while True:
                 if not boardInputed:
                     solverBoard = input("Enter your board in the following format: (R1 R2 R3 | R4 B4 Y4) ")
-                    boardTiles = solver.validateInput(solverBoard, True)
-
-                    if boardTiles == 0:
-                        continue
-                    else:
-                        b.addGroups(boardTiles)
-                        boardInputed = True
+                    if not solverBoard == '':
+                        boardTiles = solver.validateInput(solverBoard, True)
+                        if boardTiles == 0:
+                            continue
+                        else:
+                            b.addGroups(boardTiles)
+                            boardInputed = True
                 
                 b.displayBoard()
                 
@@ -70,15 +69,18 @@ Jokers or J0 = has no value\n"""
                     continue
                 else:
                     solver.displayHand()
+                    solverGoingOutGroups, tilesToRemove = goingOutSolver(solver.hand)
+                    if not solverGoingOutGroups == None:
+                        b.addGroups(solverGoingOutGroups)
+                        solver.removeItemsFromHand(tilesToRemove)
+                        b.displayBoard()
+                        solver.displayHand()
+                    gameOver = True
                     break
-                    #run solver here
-            break
 
         else:
             print('\n"{}" is not valid input! Please input 2, 3, or 4!'.format(numPlayers))
             continue
-
-        os.system('cls' if os.name == 'nt' else 'clear')
 
         while not gameOver:
             for player in players:
