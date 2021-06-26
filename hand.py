@@ -81,8 +81,8 @@ class hand():
 
         tempList = userInput.split(" ")
         newHand = []
-        for el in tempList:
-                tempTile = tile(int(el[1:]), el[0])
+        for currTile in tempList:
+                tempTile = tile(int(currTile[1:]), currTile[0])
                 newHand.append(tempTile)
 
         self.hand = newHand
@@ -112,20 +112,21 @@ class hand():
         that the input can work as groups, then makes sure that all tiles are from selected
         groups or from the players hand
         """
+        #
         if userInput == "":
             print('No groups submitted. Try again')
             return 0
         userInput = userInput.split(' | ')
         tempList = []
-        for groupo in userInput:
-            tempList.append(groupo.split(' '))
+        for currGroup in userInput:
+            tempList.append(currGroup.split(' '))
 
         groupsToAdd = []
         tempHand = self.hand[:]
         tempBoard = []
-        for groupo in selection:
-            for el in groupo.group:
-                tempBoard.append(el)
+        for currGroup in selection:
+            for currTile in currGroup.group:
+                tempBoard.append(currTile)
 
         for i in tempList:
             tempGroup = []
@@ -133,12 +134,12 @@ class hand():
                 tempTile = tile(int(j[1:]), j[0])
 
                 broke = False
-                for el in tempBoard+tempHand:
-                    if el.value == tempTile.value and el.color == tempTile.color:
+                for currTile in tempBoard+tempHand:
+                    if currTile.value == tempTile.value and currTile.color == tempTile.color:
                         try:
-                            tempBoard.remove(el)
+                            tempBoard.remove(currTile)
                         except:
-                            tempHand.remove(el)
+                            tempHand.remove(currTile)
                         broke = True
                         break
                 
@@ -173,8 +174,8 @@ class hand():
                 return 0
 
         totalValue = 0
-        for groupo in groupsToAdd:
-            totalValue += groupo.getGroupValue()
+        for currGroup in groupsToAdd:
+            totalValue += currGroup.getGroupValue()
         
         if goneOut:
             if len(tempHand) < len(self.hand):
