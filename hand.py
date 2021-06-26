@@ -112,7 +112,7 @@ class hand():
         that the input can work as groups, then makes sure that all tiles are from selected
         groups or from the players hand
         """
-        #
+        #splits userInput into format [[string]]
         if userInput == "":
             print('No groups submitted. Try again')
             return 0
@@ -121,13 +121,18 @@ class hand():
         for currGroup in userInput:
             tempList.append(currGroup.split(' '))
 
-        groupsToAdd = []
-        tempHand = self.hand[:]
+        #creates a copy of the tiles in the board for comparison later
         tempBoard = []
         for currGroup in selection:
             for currTile in currGroup.group:
                 tempBoard.append(currTile)
 
+        #iterates over every item in the temp list and tries to convert it to a tile and
+        #then combine all tiles into groups. As this is happening every time a time is
+        #added to groupsToAdd it is removed from tempBoard and tempHand to make sure that
+        #user is only using tiles from the board or their hand
+        groupsToAdd = []
+        tempHand = self.hand[:]
         for i in tempList:
             tempGroup = []
             for j in i:
@@ -173,10 +178,15 @@ class hand():
                 print("That is not a valid spot for a joker")
                 return 0
 
+        #gets the total value of each group and adds it up
         totalValue = 0
         for currGroup in groupsToAdd:
             totalValue += currGroup.getGroupValue()
         
+        #if the player has not already goneOut then the value of their hand must be equal
+        #to 30 in order to play their tiles to the board. If they have gone out the player
+        #must only use tiles from their hand or the board selection otherwise they have
+        #to only play tiles from their hand.
         if goneOut:
             if len(tempHand) < len(self.hand):
                 if len(tempBoard) == 0:
