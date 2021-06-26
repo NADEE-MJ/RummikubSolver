@@ -42,4 +42,4 @@ class drawPile():
         """
         
         self.currentTile = 0
-        random.shuffle(drawPile)
+        random.shuffle(self.drawPile)

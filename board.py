@@ -14,7 +14,10 @@ class board():
         ...
         '''
         print('BOARD')
-        print(*['Group {}: [{}]'.format(i,', '.join(boardGroup)) for i, boardGroup in enumerate(self.board)], sep='\n')
+        if len(self.board) == 0:
+            print('The board is empty')
+        else:
+            print(*['Group {}: [{}]'.format(i,', '.join(boardGroup)) for i, boardGroup in enumerate(self.board)], sep='\n')
 
     def addGroups(self,groups):
         '''

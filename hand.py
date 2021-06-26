@@ -1,9 +1,11 @@
 class hand():
-    def __init__(self):
+    def __init__(self, drawPile, player):
         '''
         Initialize a hand. Hand is a list that contains tiles
         '''
         self.hand = []
+        self.player = player
+        self.initialDraw(drawPile)
     
     def draw(self, drawPile):
         '''
@@ -36,4 +38,5 @@ class hand():
         printable = []
         for handTile in self.hand:
             printable.append('{}{}'.format(handTile.color,handTile.value))
-        print(*printable, sep='\t')
+        print("\nPlayer {}\n".format(self.player + 1))
+        print(*printable, sep='  ')

@@ -25,58 +25,69 @@ class group():
         self.group = group
         self.groupValidity()
 
-    def checkSet(self):
-        #check at least 3 tiles in group and less than 13 tiles in group
-        if len(self.group) >= 3 + len(self.group) <= 13:
-            #set check (same number)
-            setCheck = True
+    def isSet(self):
+        """
+        () -> Exception or False
 
-            #get starting number
-            for tile in self.group:
-                if tile.value != 0:
-                    tempNum = tile.value
-                    break
+        Checks whether the group is valid based off of the constraints of a set. If
+        set is invalid then an expection is raised.
+        """
+        #set check (same number)
+        setCheck = True
 
-            #check all numbers are the same or a joker
-            for tile in self.group:
-                if tile.value == tempNum or tile.value == 0:
-                    continue
-                else:
-                    setCheck = False
-                    break
+        #get starting number
+        for tile in self.group:
+            if tile.value != 0:
+                tempNum = tile.value
+                break
 
-            #set max length check
-            if setCheck:
-                if len(self.group) <= 4:
-                    #unique colors check
-                    usedColors = []
-                    for tile in self.group:
-                        if tile.color in usedColors:
-                            raise UniqueColorError
-                        else:
-                            usedColors.append(tile.color)
-                else:
-                    raise SetError
+        #check all numbers are the same or a joker
+        for tile in self.group:
+            if tile.value == tempNum or tile.value == 0:
+                continue
+            else:
+                setCheck = False
+                break
 
-            #run check (same color)
-            #get starting color
-            for tile in self.group:
-                if tile.color != 'J':
-                    tempColor = tile.color
-                    break
+        #set max length check
+        if setCheck:
+            if len(self.group) <= 4:
+                #unique colors check
+                usedColors = []
+                for tile in self.group:
+                    if tile.color in usedColors:
+                        raise UniqueColorError
+                    else:
+                        usedColors.append(tile.color)
+            else:
+                raise SetError
 
-            #check all colors are the same or a joker
-            for tile in self.group:
-                if tile.color == tempColor or tile.color == 'J':
-                    continue
-                else:
-                    raise GroupError
+        return False  
 
-    def checkRun(self):
-        numbersInGroup = []
+    def isRun(self):
+        """
+        () -> Exception or False
+
+        Checks whether the group is valid based off of the constraints of a Run. If
+        Run is invalid then an expection is raised.
+        """
+        #get starting color
+        for tile in self.group:
+            if tile.color != 'J':
+                tempColor = tile.color
+                break
+
+        #check all colors are the same or a joker
+        for tile in self.group:
+            if tile.color == tempColor or tile.color == 'J':
+                continue
+            else:
+                raise GroupError
+
+        #check to see if run is sequential and does not contain jokers at the beginning
+        #before a 1 and after a 13
         consJoker = 0
         currNum = 0
-
         if self.group[0].value == 0:
             consJoker += 1
         else:
@@ -85,7 +96,7 @@ class group():
         for i in range(1, len(self.group)):
             if self.group[i].value == 0:
                 consJoker += 1
-                if curr_num + consJoker > 13:
+                if currNum + consJoker > 13:
                     raise InvalidJokerError
             else:
                 if consJoker > 0 and self.group[i].value - consJoker < 1:
@@ -97,16 +108,21 @@ class group():
                         raise RunError
                     currNum = self.group[i].value
 
-                cons_joker = 0
+                consJoker = 0
 
+        return False
 
     def groupValidity(self):
         """
         () -> Exception?
 
         Checks whether group is valid based on the constraints of a either a set or run. If
-        the group conforms to a set or run then no exception is raised, otherwise a specific
-        exception is raised.
+        the group conforms to a set or run then no exception is raised, otherwise a 
+        specific exception is raised.
         """
-        self.checkSet()
-        self.checkRun()
+        #check at least 3 tiles in group and less than 13 tiles in group
+        if len(self.group) >= 3 + len(self.group) <= 13:
+            self.isSet()
+            self.isRun()
+        else:
+            raise GroupError
