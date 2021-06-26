@@ -172,8 +172,6 @@ def calculateOutGroupsValue(outGroups):
     """
     outGroupsValue = 0
     for currGroup in outGroups:
-        for currTile in currGroup.group:
-            if currTile.value != 0:
-                outGroupsValue += currTile.value
+        outGroupsValue += currGroup.getGroupValue()
     
     return outGroupsValue

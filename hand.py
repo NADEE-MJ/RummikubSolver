@@ -34,10 +34,22 @@ class hand():
             self.draw(drawPile)
     
     def resetHand(self, drawPile):
+        """
+        (self, [tile]) -> None
+
+        resets hand to an empty hand for use with addCustomHand and resets drawPile to 
+        start at the top of the pile.
+        """
         self.hand = []
         drawPile.currentTile = 0
 
     def removeItemsFromHand(self, tilesAddedToBoard):
+        """
+        (self, [tiles]) -> None
+        
+        Given list of tiles added to the board, removes the tiles that are added to 
+        the board from the hand
+        """
         currHand = self.hand[:]
         TilesToRemove = []
         tempHand = []
@@ -57,6 +69,12 @@ class hand():
         self.hand = currHand
 
     def addCustomHand(self, userInput):
+        """
+        (self, string) -> None or 0
+        
+        add a customHand to self.hand instead of using the intial draw method for 
+        testing purposes and using the solving functions
+        """
         if userInput == "":
             print('No groups submitted. Try again')
             return 0
@@ -70,9 +88,8 @@ class hand():
         self.hand = newHand
         
     def displayHand(self):
-        # print out hand not using list comprehension (worse)
         '''
-        Print out tiles in hand separated by tabs
+        Print out tiles in hand separated by spaces in a 5 wide table
         '''
         count = 0
         if self.playerNum == -1:
@@ -88,6 +105,13 @@ class hand():
         
 
     def validateInput(self, userInput, goneOut, selection=[]):
+        """
+        (self, string, bool, [group]) -> [group] or 0
+
+        Validates that input from a string can be converted into a set of tiles, then checks
+        that the input can work as groups, then makes sure that all tiles are from selected
+        groups or from the players hand
+        """
         if userInput == "":
             print('No groups submitted. Try again')
             return 0
