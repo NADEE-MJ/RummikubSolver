@@ -55,7 +55,7 @@ class group():
                 #unique colors check
                 usedColors = []
                 for tile in self.group:
-                    if tile.color in usedColors:
+                    if tile.color != 'J' and tile.color in usedColors:
                         raise UniqueColorError
                     else:
                         usedColors.append(tile.color)
