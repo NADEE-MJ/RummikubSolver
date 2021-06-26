@@ -17,9 +17,13 @@ class hand():
         '''
         Adds the next tile from the draw pile to hand. Increments current tile target in drawpile.
         '''
-        self.hand.append(drawPile.drawPile[drawPile.currentTile])
+        if drawPile.currentTile >= len(drawPile.drawPile):
+            print("Reached Maximum Tile, no tiles to distribute")
+        else:
+            self.hand.append(drawPile.drawPile[drawPile.currentTile])
+    
         drawPile.currentTile += 1
-
+    
     def initialDraw(self, drawPile):
         '''
         Draws standard hand worth of tiles into hand.
@@ -46,14 +50,6 @@ class hand():
 
         self.hand = newHand
         
-
-    # def displayHand(self):
-    #     # print out hand using list comprehension (better)
-    #     '''
-    #     Print out tiles in hand separated by tabs
-    #     '''
-    #     print(*['{}{}'.format(handTile.color,handTile.value) for handTile in self.hand], sep='\t')
-    
     def displayHand(self):
         # print out hand not using list comprehension (worse)
         '''
@@ -84,7 +80,7 @@ class hand():
         groupsToAdd = []
         tempHand = self.hand[:]
         tempBoard = []
-        for groupo in selection[:]:
+        for groupo in selection:
             for el in groupo.group:
                 tempBoard.append(el)
 

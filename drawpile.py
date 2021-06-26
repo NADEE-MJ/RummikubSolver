@@ -24,14 +24,17 @@ class drawPile():
         highestValue = 13
         numberOfJokers = 2
         numberOfEachTile = 2
+        self.maxTile = 0
         for i in range(1, highestValue + 1):
             for _ in range(0, numberOfEachTile):
                 self.drawPile.append(tile(i, 'R'))
                 self.drawPile.append(tile(i, 'B'))
                 self.drawPile.append(tile(i, 'Y'))
                 self.drawPile.append(tile(i, 'K'))
+                self.maxTile += 4
         for i in range(0, numberOfJokers):
             self.drawPile.append(tile(0, 'J'))
+            self.maxTile += 1
 
     def shuffle(self):
         """
