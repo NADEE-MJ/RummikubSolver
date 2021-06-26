@@ -1,4 +1,6 @@
 from itertools import combinations
+from group import group
+from tile import tile
 def generateNoJokerSet(highestNum, colors):
     noJokerSet = []
     for color in colors:
@@ -26,8 +28,8 @@ def generateNoJokerSet(highestNum, colors):
 def generateOneJokerSet(noJokerSet):
     oneJokerSet = []
     for party in noJokerSet:
-        for i in range(0, len(party)):
-            partyCopy = party[:]
+        for i in range(0, len(party.group)):
+            partyCopy = party.group[:]
             partyCopy[i] = tile(0, 'J')
             oneJokerSet.append(partyCopy)
     return oneJokerSet
@@ -50,3 +52,5 @@ def generateSet(highestNum, colors):
     twoJokerSet = generateTwoJokerSet(oneJokerSet)
     bigSet.extend(twoJokerSet)
     return bigSet
+
+print(len(generateSet(13,['R','B','K','Y'])))
