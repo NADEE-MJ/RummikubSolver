@@ -67,7 +67,7 @@ class hand():
         for handTile in self.hand:
             if count % 5 == 0 and count > 0:
                 print("\n")
-            print(handTile.string, end=' ')
+            print(handTile.cstring, end=' ')
             count += 1
         print("\n", end='')
         
