@@ -1,5 +1,8 @@
 class board():
     def __init__(self):
+        '''
+        Initialize board class. Make an empty list for the board to hold groups
+        '''
         self.board = []
 
     def displayBoard(self):
@@ -11,7 +14,7 @@ class board():
         ...
         '''
         print('BOARD')
-        print(*['Group {}: [{}]'.format(i+1,', '.join(boardGroup)) for i, boardGroup in enumerate(self.board)], sep='\n')
+        print(*['Group {}: [{}]'.format(i,', '.join(boardGroup)) for i, boardGroup in enumerate(self.board)], sep='\n')
 
     def addGroups(self,groups):
         '''
@@ -34,11 +37,6 @@ class board():
         '''
         self.selection = [self.board[int(i)] for i in selectionIndices.split(' ')]
         self.removeGroups(self.selection)
-
-    def displaySelection(self):
-        '''
-        print out selected groups from makeSelection()
-        '''
         print('SELECTED GROUPS')
         print(*['[{}]'.format(', '.join(selectedGroup)) for selectedGroup in self.selection], sep='\n')
     
