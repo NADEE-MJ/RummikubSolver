@@ -1,14 +1,15 @@
 from tile import tile
 from group import GroupError, InvalidJokerError, RunError, SetError, UniqueColorError, group
 class hand():
-    def __init__(self, drawPile, player):
+    def __init__(self, drawPile, playerNum):
         '''
         Initialize a hand. Hand is a list that contains tiles
         '''
         self.hand = []
-        self.player = player
+        self.playerNum = playerNum
         self.playedTiles = False
         self.goneOut = False
+        self.hasWon = False
         self.initialDraw(drawPile)
     
     def draw(self, drawPile):
@@ -41,7 +42,7 @@ class hand():
         '''
         printable = []
         count = 0
-        print("\nPlayer {} Hand\n".format(self.player + 1))
+        print("\nPlayer {} Hand\n".format(self.playerNum + 1))
         for handTile in self.hand:
             if count % 5 == 0 and count > 0:
                 print("\n")
@@ -119,6 +120,8 @@ class hand():
             if len(tempHand) < len(self.hand):
                 if len(tempBoard) == 0:
                     self.hand = tempHand
+                    if len(tempHand) == 0:
+                        self.hasWon == True
                     return groupsToAdd
                 else:
                     print("Didn't include all tiles from board selection")
