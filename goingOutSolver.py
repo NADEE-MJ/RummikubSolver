@@ -73,6 +73,10 @@ def setCheck(currHand):
                 prevTile = 0
                 tempGroup = []
                 addedColors = []
+            elif len(tempGroup) >= 3 and currTile == currHand[-1]:
+                tempOutGroups.append(tempGroup)
+                for tileToRemove in tempGroup:
+                    currHand.remove(tileToRemove)
         else:
             if len(tempGroup) >= 3:
                 tempOutGroups.append(tempGroup)
@@ -103,7 +107,15 @@ def runCheck(currHand):
         if currTile[0] < prevTile and currTile[1] == currColor:
             tempGroup.append(currTile)
             prevTile = currTile[0]
+            if len(tempGroup) >= 3 and currTile == currHand[-1]:
+                tempOutGroups.append(tempGroup)
+                for tileToRemove in tempGroup:
+                    currHand.remove(tileToRemove)
         elif currTile[0] == prevTile and currTile[1] == currColor:
+            if len(tempGroup) >= 3 and currTile == currHand[-1]:
+                tempOutGroups.append(tempGroup)
+                for tileToRemove in tempGroup:
+                    currHand.remove(tileToRemove)
             continue
         else:
             if len(tempGroup) >= 3:
