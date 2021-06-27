@@ -18,7 +18,7 @@ def main():
 MENU
 1. Play Tiles
 2. End Turn
-3. Solve()
+3. Solve(GoingOutSolve or FullSolve)
 Enter: """
 
     colorKey = f"Color Key:\n{colors.colorsDict['R']}R = Red \n\
@@ -140,30 +140,33 @@ Jokers or J0 = has no value\n"""
                             player.draw(d)
                         break
                     elif userChoice == '3':
-                        #goingOutSolver
-                        os.system('cls' if os.name == 'nt' else 'clear')
-                        b.displayBoard()
-                        player.displayHand()
-                        playerGoingOutGroups, tilesToRemove = goingOutSolver(player.hand)
-                        if not playerGoingOutGroups == None:
-                            b.addGroups(playerGoingOutGroups)
-                            player.removeItemsFromHand(tilesToRemove)
+                        if not player.goneOut:
+                            #goingOutSolver
+                            os.system('cls' if os.name == 'nt' else 'clear')
                             b.displayBoard()
                             player.displayHand()
-                        continue
-                    elif userChoice == '4':
-                        #solver
-                        os.system('cls' if os.name == 'nt' else 'clear')
-                        b.displayBoard()
-                        player.displayHand()
-                        groupsToAdd, newHand = dannySolver(player.hand, b.selectAllGroups())
-                        if groupsToAdd != None:
-                            b.addGroups(groupsToAdd)
-                            player.hand = newHand
-                            b.displayBoard()
-                            player.displayHand()
+                            playerGoingOutGroups, tilesToRemove = goingOutSolver(player.hand)
+                            if not playerGoingOutGroups == None:
+                                b.addGroups(playerGoingOutGroups)
+                                player.removeItemsFromHand(tilesToRemove)
+                                player.goneOut = True
+                                os.system('cls' if os.name == 'nt' else 'clear')
+                            continue
+
                         else:
-                            b.reinsertSelection()
+                            #solver
+                            os.system('cls' if os.name == 'nt' else 'clear')
+                            b.displayBoard()
+                            player.displayHand()
+                            groupsToAdd, newHand = dannySolver(player.hand, b.selectAllGroups())
+                            if groupsToAdd != None:
+                                b.addGroups(groupsToAdd)
+                                player.hand = newHand
+                                b.displayBoard()
+                                player.displayHand()
+                            else:
+                                b.reinsertSelection()
+                            os.system('cls' if os.name == 'nt' else 'clear')
                     else:
                         print('"{}" is not an option!\n'.format(userChoice))
 

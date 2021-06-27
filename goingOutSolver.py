@@ -1,5 +1,6 @@
 from tile import tile
 from group import GroupError, InvalidJokerError, RunError, SetError, UniqueColorError, group
+import os
 
 def takeSecond(elem):
     """
@@ -66,6 +67,7 @@ def goingOutSolver(solverHand):
     if outGroupsValue >= 30:
         return outGroups, tilesToRemove
     else:
+        os.system('cls' if os.name == 'nt' else 'clear')
         print("Not able to go out.")
         return None, None
 

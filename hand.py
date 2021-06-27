@@ -1,3 +1,4 @@
+import os
 from tile import tile
 from group import GroupError, InvalidJokerError, RunError, SetError, UniqueColorError, group
 class hand():
@@ -76,6 +77,7 @@ class hand():
         testing purposes and using the solving functions
         """
         if userInput == "":
+            os.system('cls' if os.name == 'nt' else 'clear')
             print('No groups submitted. Try again')
             return 0
 
@@ -114,6 +116,7 @@ class hand():
         """
         #splits userInput into format [[string]]
         if userInput == "":
+            os.system('cls' if os.name == 'nt' else 'clear')
             print('No groups submitted. Try again')
             return 0
         userInput = userInput.split(' | ')
@@ -192,7 +195,7 @@ class hand():
                 if len(tempBoard) == 0:
                     self.hand = tempHand
                     if len(tempHand) == 0:
-                        self.hasWon == True
+                        self.hasWon = True
                     return groupsToAdd
                 else:
                     print("Didn't include all tiles from board selection")
