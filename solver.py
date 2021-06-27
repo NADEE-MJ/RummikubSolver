@@ -1,6 +1,6 @@
 import numpy as np
 from group import group
-import ILP
+import combGen
 
 def checkLen(elem):
     """
@@ -29,7 +29,7 @@ def solver(currHand, currBoard):
 
     # this is a list of every possible unique group
     # xarray is the location of all groups that can be made from the tiles in the masterList
-    exhaustiveList = ILP.generateSet(13,['R','B','K','Y'])
+    exhaustiveList = combGen.generateSet(13,['R','B','K','Y'])
     xarray = np.zeros(len(exhaustiveList))
     for item in exhaustiveList:
         jokerCount = 0
