@@ -73,3 +73,11 @@ def generateSet(highestNum, colors):
     twoJokerSet = generateTwoJokerSet(oneJokerSet)
     bigSet.extend(twoJokerSet)
     return bigSet
+
+if __name__ == '__main__':
+    bigSet = generateSet(13,['R','B','K','Y'])
+
+    for i in bigSet:
+        print(*[x.cstring for x in i.group])
+
+    print(bigSet)
