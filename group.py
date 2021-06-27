@@ -127,6 +127,12 @@ class group():
             raise GroupError
 
     def getGroupValue(self):
+        """
+        (self) -> Int
+        
+        Interates over self.group and adds the value of each tile to the total value of
+        the group and then returns it
+        """
         groupValue = 0
         for tile in self.group:
             groupValue += tile.value

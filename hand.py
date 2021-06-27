@@ -34,10 +34,22 @@ class hand():
             self.draw(drawPile)
     
     def resetHand(self, drawPile):
+        """
+        (self, [tile]) -> None
+
+        resets hand to an empty hand for use with addCustomHand and resets drawPile to 
+        start at the top of the pile.
+        """
         self.hand = []
         drawPile.currentTile = 0
 
     def removeItemsFromHand(self, tilesAddedToBoard):
+        """
+        (self, [tiles]) -> None
+        
+        Given list of tiles added to the board, removes the tiles that are added to 
+        the board from the hand
+        """
         currHand = self.hand[:]
         TilesToRemove = []
         tempHand = []
@@ -57,22 +69,27 @@ class hand():
         self.hand = currHand
 
     def addCustomHand(self, userInput):
+        """
+        (self, string) -> None or 0
+        
+        add a customHand to self.hand instead of using the intial draw method for 
+        testing purposes and using the solving functions
+        """
         if userInput == "":
             print('No groups submitted. Try again')
             return 0
 
         tempList = userInput.split(" ")
         newHand = []
-        for el in tempList:
-                tempTile = tile(int(el[1:]), el[0])
+        for currTile in tempList:
+                tempTile = tile(int(currTile[1:]), currTile[0])
                 newHand.append(tempTile)
 
         self.hand = newHand
         
     def displayHand(self):
-        # print out hand not using list comprehension (worse)
         '''
-        Print out tiles in hand separated by tabs
+        Print out tiles in hand separated by spaces in a 5 wide table
         '''
         count = 0
         if self.playerNum == -1:
@@ -88,33 +105,46 @@ class hand():
         
 
     def validateInput(self, userInput, goneOut, selection=[]):
+        """
+        (self, string, bool, [group]) -> [group] or 0
+
+        Validates that input from a string can be converted into a set of tiles, then checks
+        that the input can work as groups, then makes sure that all tiles are from selected
+        groups or from the players hand
+        """
+        #splits userInput into format [[string]]
         if userInput == "":
             print('No groups submitted. Try again')
             return 0
         userInput = userInput.split(' | ')
         tempList = []
-        for groupo in userInput:
-            tempList.append(groupo.split(' '))
+        for currGroup in userInput:
+            tempList.append(currGroup.split(' '))
 
+        #creates a copy of the tiles in the board for comparison later
+        tempBoard = []
+        for currGroup in selection:
+            for currTile in currGroup.group:
+                tempBoard.append(currTile)
+
+        #iterates over every item in the temp list and tries to convert it to a tile and
+        #then combine all tiles into groups. As this is happening every time a time is
+        #added to groupsToAdd it is removed from tempBoard and tempHand to make sure that
+        #user is only using tiles from the board or their hand
         groupsToAdd = []
         tempHand = self.hand[:]
-        tempBoard = []
-        for groupo in selection:
-            for el in groupo.group:
-                tempBoard.append(el)
-
         for i in tempList:
             tempGroup = []
             for j in i:
                 tempTile = tile(int(j[1:]), j[0])
 
                 broke = False
-                for el in tempBoard+tempHand:
-                    if el.value == tempTile.value and el.color == tempTile.color:
+                for currTile in tempBoard+tempHand:
+                    if currTile.value == tempTile.value and currTile.color == tempTile.color:
                         try:
-                            tempBoard.remove(el)
+                            tempBoard.remove(currTile)
                         except:
-                            tempHand.remove(el)
+                            tempHand.remove(currTile)
                         broke = True
                         break
                 
@@ -148,10 +178,15 @@ class hand():
                 print("That is not a valid spot for a joker")
                 return 0
 
+        #gets the total value of each group and adds it up
         totalValue = 0
-        for groupo in groupsToAdd:
-            totalValue += groupo.getGroupValue()
+        for currGroup in groupsToAdd:
+            totalValue += currGroup.getGroupValue()
         
+        #if the player has not already goneOut then the value of their hand must be equal
+        #to 30 in order to play their tiles to the board. If they have gone out the player
+        #must only use tiles from their hand or the board selection otherwise they have
+        #to only play tiles from their hand.
         if goneOut:
             if len(tempHand) < len(self.hand):
                 if len(tempBoard) == 0:

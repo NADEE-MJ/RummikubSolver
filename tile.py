@@ -19,7 +19,17 @@ class tile():
         self.cstring = self.coloredStringFormat()
         
     def stringFormat(self):
+        """
+        (self) -> string
+        
+        returns the name of the tile formatted as a string
+        """
         return "{}{}".format(self.color, self.value)
 
     def coloredStringFormat(self):
+        """
+        (self) -> string
+        
+        returns the name of the tile formatted as a string with the proper color
+        """
         return f"{colors.colorsDict[self.color]}{self.string}{colors.colorsDict['E']}"
