@@ -72,3 +72,6 @@ for item in exhaustiveList:
 print(exHandStrings)
 print(xarray)
 # print(exhaustiveList)
+
+
+
