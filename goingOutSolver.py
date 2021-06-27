@@ -52,7 +52,7 @@ def goingOutSolver(solverHand):
             if jokerCount >= 1:
                 currHand.sort(reverse=True)
                 currHand.sort(key=takeSecond)
-                tempList, currHand, jokerCount = runCheckJoker(currHand, jokerCount)
+                tempList, currHand, jokerCount = runCheckJoker(currHand, jokerCount, firstPass)
                 tempOutGroups.extend(tempList)
         firstPass = False
 
@@ -135,19 +135,25 @@ def setCheckJoker(currHand, numJokers, firstPass):
                 tempOutGroups.append(tempGroup)
                 for tileToRemove in tempGroup:
                     currHand.remove(tileToRemove)
+                tempGroup = []
+                addedColors = []
             continue
 
-        elif currTile[0] != prevTile and len(tempGroup) >= 2 and len(tempGroup) < 5 and numJokers > 0 and firstPass:
+        elif currTile[0] != prevTile and len(tempGroup) == 2 and len(tempGroup) < 5 and numJokers > 0 and firstPass:
             tempGroup.append([0, 'J'])
             numJokers -= 1
             if numJokers == 0 and len(tempGroup) >= 3:
                 tempOutGroups.append(tempGroup)
                 for tileToRemove in tempGroup:
                     currHand.remove(tileToRemove)
+                tempGroup = []
+                addedColors = []
             elif numJokers == 1 and len(tempGroup) >= 3 and currTile == currHand[-1]:
                 tempOutGroups.append(tempGroup)
                 for tileToRemove in tempGroup:
                     currHand.remove(tileToRemove)
+                tempGroup = []
+                addedColors = []
 
         elif currTile[0] != prevTile and len(tempGroup) >= 1 and len(tempGroup) < 5 and numJokers > 0 and not firstPass:
             tempGroup.append([0, 'J'])
@@ -156,10 +162,14 @@ def setCheckJoker(currHand, numJokers, firstPass):
                 tempOutGroups.append(tempGroup)
                 for tileToRemove in tempGroup:
                     currHand.remove(tileToRemove)
+                tempGroup = []
+                addedColors = []
             elif numJokers == 1 and len(tempGroup) >= 3 and currTile == currHand[-1]:
                 tempOutGroups.append(tempGroup)
                 for tileToRemove in tempGroup:
                     currHand.remove(tileToRemove)
+                tempGroup = []
+                addedColors = []
 
         else:
             if len(tempGroup) >= 3:
@@ -188,7 +198,7 @@ def runCheck(currHand):
     currColor = ''
     
     for currTile in currHand:
-        if currTile[0] < prevTile and currTile[1] == currColor:
+        if currTile[0] == prevTile - 1 and currTile[1] == currColor:
             tempGroup.append(currTile)
             prevTile = currTile[0]
             if len(tempGroup) >= 3 and currTile == currHand[-1]:
@@ -207,9 +217,13 @@ def runCheck(currHand):
                 for tileToRemove in tempGroup:
                     currHand.remove(tileToRemove)
             tempGroup = []
+            tempGroup.append(currTile)
             prevTile = currTile[0]
             currColor = currTile[1]
     
+    for currGroup in tempOutGroups:
+        currGroup.reverse()
+
     return tempOutGroups, currHand
 
 def runCheckJoker(currHand, numJokers, firstPass):
@@ -225,7 +239,7 @@ def runCheckJoker(currHand, numJokers, firstPass):
     currColor = ''
     
     for currTile in currHand:
-        if currTile[0] < prevTile and currTile[1] == currColor:
+        if currTile[0] == prevTile - 1 and currTile[1] == currColor:
             tempGroup.append(currTile)
             prevTile = currTile[0]
             if len(tempGroup) >= 3 and currTile == currHand[-1]:
@@ -270,10 +284,14 @@ def runCheckJoker(currHand, numJokers, firstPass):
                 for tileToRemove in tempGroup:
                     currHand.remove(tileToRemove)
             tempGroup = []
+            tempGroup.append(currTile)
             prevTile = currTile[0]
             currColor = currTile[1]
+
+    for currGroup in tempOutGroups:
+        currGroup.reverse()
     
-    return tempOutGroups, currHand
+    return tempOutGroups, currHand, numJokers
 
 
 def convertToListOfGroups(tempOutGroups):
@@ -308,6 +326,8 @@ def convertToListOfGroups(tempOutGroups):
         
         except InvalidJokerError:
             print("That is not a valid spot for a joker")
+
+        tempGroup = []
     
     return outGroups, tilesToRemove
 

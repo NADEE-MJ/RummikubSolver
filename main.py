@@ -36,6 +36,7 @@ Jokers or J0 = has no value\n"""
     while True:
         gameOver = False
         numPlayers = input("How many people are playing? (2, 3, or 4) ")
+        #numPlayers = 'solver' #for testing goingOutSolver
 
         if numPlayers in ['2', '3', '4']:
             players = [hand(d, i, False) for i in range(int(numPlayers))]
@@ -141,7 +142,16 @@ Jokers or J0 = has no value\n"""
                         #solver
                         #NEED TO CREATE SOLVER FIRST
                         os.system('cls' if os.name == 'nt' else 'clear')
-                        pass
+                        b.displayBoard()
+                        player.displayHand()
+                        playerGoingOutGroups, tilesToRemove = goingOutSolver(player.hand)
+                        if not playerGoingOutGroups == None:
+                            b.addGroups(playerGoingOutGroups)
+                            player.removeItemsFromHand(tilesToRemove)
+                            b.displayBoard()
+                            player.displayHand()
+                        gameOver = True
+                        continue
                     else:
                         print('"{}" is not an option!\n'.format(userChoice))
 
