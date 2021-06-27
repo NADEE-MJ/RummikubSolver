@@ -25,18 +25,36 @@ def goingOutSolver(solverHand):
         if currTile.value == 0:
             jokerCount += 1
     
-    #orders currHand by value descending and checks for valid sets not including jokers
-    currHand.sort(reverse=True)
-    
-    tempOutGroups, currHand = setCheck(currHand)
+    tempOutGroups = []
+    for i in range(2):
+        #orders currHand by value descending and checks for valid sets not including jokers
+        currHand.sort(reverse=True)
+        tempList, currHand = setCheck(currHand)
+        tempOutGroups.extend(tempList)
 
-    #orders currhand by value descending and then by color
-    currHand.sort(reverse=True)
-    currHand.sort(key=takeSecond)
+        #orders currhand by value descending and then by color then checks for runs 
+        #not including jokers
+        currHand.sort(reverse=True)
+        currHand.sort(key=takeSecond)
+        tempList, currHand = runCheck(currHand)
+        tempOutGroups.extend(tempList)
 
-    #checks for runs not including jokers
-    tempList, currHand = runCheck(currHand)
-    tempOutGroups.extend(tempList)
+    firstPass = True
+    for i in range(2):
+        #check for sets and runs again with jokers included
+        if jokerCount >= 1:
+            #sets with jokers
+            currHand.sort(reverse=True)
+            tempList, currHand, jokerCount = setCheckJoker(currHand, jokerCount, firstPass)
+            tempOutGroups.extend(tempList)
+            
+            #runs with jokers
+            if jokerCount >= 1:
+                currHand.sort(reverse=True)
+                currHand.sort(key=takeSecond)
+                tempList, currHand, jokerCount = runCheckJoker(currHand, jokerCount)
+                tempOutGroups.extend(tempList)
+        firstPass = False
 
     #converts tempOutGroups to format = [group] and determines tiles to remove
     outGroups, tilesToRemove = convertToListOfGroups(tempOutGroups)
@@ -77,6 +95,12 @@ def setCheck(currHand):
                 tempOutGroups.append(tempGroup)
                 for tileToRemove in tempGroup:
                     currHand.remove(tileToRemove)
+        elif currTile[0] == prevTile and currTile[1] in addedColors:
+            if len(tempGroup) >= 3 and currTile == currHand[-1]:
+                tempOutGroups.append(tempGroup)
+                for tileToRemove in tempGroup:
+                    currHand.remove(tileToRemove)
+            continue
         else:
             if len(tempGroup) >= 3:
                 tempOutGroups.append(tempGroup)
@@ -89,6 +113,66 @@ def setCheck(currHand):
             addedColors.append(currTile[1])
 
     return tempOutGroups, currHand
+
+def setCheckJoker(currHand, numJokers, firstPass):
+    """
+    ([[int, char]], int, bool) -> ([group], [[int, char]], int)
+
+    Checks if given a hand and number of jokers can you create any sets based off the rules 
+    of a set in rummikub, must all be the same number but all different colors.
+    """
+    prevTile = 0
+    tempGroup = []
+    tempOutGroups = []
+    addedColors = []
+    for currTile in currHand:
+        if currTile[0] == prevTile and currTile[1] not in addedColors and len(tempGroup) < 5:
+            tempGroup.append(currTile)
+            addedColors.append(currTile[1])
+
+        elif currTile[0] == prevTile and currTile[1] in addedColors:
+            if len(tempGroup) >= 3 and currTile == currHand[-1]:
+                tempOutGroups.append(tempGroup)
+                for tileToRemove in tempGroup:
+                    currHand.remove(tileToRemove)
+            continue
+
+        elif currTile[0] != prevTile and len(tempGroup) >= 2 and len(tempGroup) < 5 and numJokers > 0 and firstPass:
+            tempGroup.append([0, 'J'])
+            numJokers -= 1
+            if numJokers == 0 and len(tempGroup) >= 3:
+                tempOutGroups.append(tempGroup)
+                for tileToRemove in tempGroup:
+                    currHand.remove(tileToRemove)
+            elif numJokers == 1 and len(tempGroup) >= 3 and currTile == currHand[-1]:
+                tempOutGroups.append(tempGroup)
+                for tileToRemove in tempGroup:
+                    currHand.remove(tileToRemove)
+
+        elif currTile[0] != prevTile and len(tempGroup) >= 1 and len(tempGroup) < 5 and numJokers > 0 and not firstPass:
+            tempGroup.append([0, 'J'])
+            numJokers -= 1
+            if numJokers >= 0 and len(tempGroup) >= 3:
+                tempOutGroups.append(tempGroup)
+                for tileToRemove in tempGroup:
+                    currHand.remove(tileToRemove)
+            elif numJokers == 1 and len(tempGroup) >= 3 and currTile == currHand[-1]:
+                tempOutGroups.append(tempGroup)
+                for tileToRemove in tempGroup:
+                    currHand.remove(tileToRemove)
+
+        else:
+            if len(tempGroup) >= 3:
+                tempOutGroups.append(tempGroup)
+                for tileToRemove in tempGroup:
+                    currHand.remove(tileToRemove)
+            prevTile = currTile[0]
+            tempGroup = []
+            addedColors = []
+            tempGroup.append(currTile)
+            addedColors.append(currTile[1])
+
+    return tempOutGroups, currHand, numJokers
 
 def runCheck(currHand):
     """
@@ -127,6 +211,70 @@ def runCheck(currHand):
             currColor = currTile[1]
     
     return tempOutGroups, currHand
+
+def runCheckJoker(currHand, numJokers, firstPass):
+    """
+    ([[int, char]], int, bool) -> ([group], [[int, char]], int)
+
+    Checks if given a hand and number of jokers can you create any runs based off the rules 
+    of a run in rummikub, must all be the same color in sequential order.
+    """
+    prevTile = 0
+    tempGroup = []
+    tempOutGroups =[]
+    currColor = ''
+    
+    for currTile in currHand:
+        if currTile[0] < prevTile and currTile[1] == currColor:
+            tempGroup.append(currTile)
+            prevTile = currTile[0]
+            if len(tempGroup) >= 3 and currTile == currHand[-1]:
+                tempOutGroups.append(tempGroup)
+                for tileToRemove in tempGroup:
+                    currHand.remove(tileToRemove)
+
+        elif currTile[0] == prevTile and currTile[1] == currColor:
+            if len(tempGroup) >= 3 and currTile == currHand[-1]:
+                tempOutGroups.append(tempGroup)
+                for tileToRemove in tempGroup:
+                    currHand.remove(tileToRemove)
+            continue
+
+        elif currTile[0] >= prevTile and firstPass:
+            tempGroup.append([0, 'J'])
+            numJokers -= 1
+            if numJokers == 0 and len(tempGroup) >= 3:
+                tempOutGroups.append(tempGroup)
+                for tileToRemove in tempGroup:
+                    currHand.remove(tileToRemove)
+            elif numJokers == 1 and len(tempGroup) >= 3 and currTile == currHand[-1]:
+                tempOutGroups.append(tempGroup)
+                for tileToRemove in tempGroup:
+                    currHand.remove(tileToRemove)
+
+        elif currTile[0] >= prevTile and not firstPass:
+            tempGroup.append([0, 'J'])
+            numJokers -= 1
+            if numJokers >= 0 and len(tempGroup) >= 3:
+                tempOutGroups.append(tempGroup)
+                for tileToRemove in tempGroup:
+                    currHand.remove(tileToRemove)
+            elif numJokers == 1 and len(tempGroup) >= 3 and currTile == currHand[-1]:
+                tempOutGroups.append(tempGroup)
+                for tileToRemove in tempGroup:
+                    currHand.remove(tileToRemove)
+
+        else:
+            if len(tempGroup) >= 3:
+                tempOutGroups.append(tempGroup)
+                for tileToRemove in tempGroup:
+                    currHand.remove(tileToRemove)
+            tempGroup = []
+            prevTile = currTile[0]
+            currColor = currTile[1]
+    
+    return tempOutGroups, currHand
+
 
 def convertToListOfGroups(tempOutGroups):
     """
