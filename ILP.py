@@ -3,6 +3,11 @@ from group import group
 from tile import tile
 
 def checkListDup(a, b):
+    """
+    ([tile], [tile]) -> (True, False)
+
+    Checks for Duplicates in the list of tiles
+    """
     if len(a) != len(b):
         return False
     for i in range(len(a)):
@@ -11,6 +16,11 @@ def checkListDup(a, b):
     return True
 
 def generateNoJokerSet(highestNum, colors):
+    """
+    (highestNum, [char]) -> ([group])
+
+    Creates an exhaustive list of combinations possible without Jokers
+    """
     noJokerSet = []
     for color in colors:
         for i in range(3, highestNum + 1):
@@ -35,6 +45,11 @@ def generateNoJokerSet(highestNum, colors):
     return noJokerSet
 
 def generateOneJokerSet(noJokerSet):
+    """
+    ([group]) -> ([group])
+
+    Creates an exhaustive list of combinations possible with 1 Joker
+    """
     oneJokerSet = []
     for party in noJokerSet:
         for i in range(0, len(party.group)):
@@ -44,6 +59,11 @@ def generateOneJokerSet(noJokerSet):
     return oneJokerSet
 
 def generateTwoJokerSet(oneJokerSet):
+    """
+    ([group]) -> ([group])
+
+    Creates an exhaustive list of combinations possible with 2 Jokers
+    """
     twoJokerSet = []
     for party in oneJokerSet:
         for i in range(0, len(party.group)):
@@ -66,6 +86,11 @@ def generateTwoJokerSet(oneJokerSet):
     return twoJokerSet
 
 def generateSet(highestNum, colors):
+    """
+    (int, [char]) -> ([group])
+
+    Creates an exhaustive list of combinations possible with no, 1, and 2 Jokers
+    """
 
     bigSet = generateNoJokerSet(highestNum, colors)
     oneJokerSet = generateOneJokerSet(bigSet)
@@ -73,11 +98,3 @@ def generateSet(highestNum, colors):
     twoJokerSet = generateTwoJokerSet(oneJokerSet)
     bigSet.extend(twoJokerSet)
     return bigSet
-
-if __name__ == '__main__':
-    bigSet = generateSet(13,['R','B','K','Y'])
-
-    for i in bigSet:
-        print(*[x.cstring for x in i.group])
-
-    print(bigSet)
