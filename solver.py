@@ -3,6 +3,11 @@ from group import group
 import ILP
 
 def checkLen(elem):
+    """
+    (group) -> int
+
+    returns the length of a group
+    """
     return len(elem.group)
 
 def solver(currHand, currBoard):
@@ -22,6 +27,8 @@ def solver(currHand, currBoard):
     exHand = currHand + boardCopy
     exHandStrings = [x.string for x in exHand]
 
+    # this is a list of every possible unique group
+    # xarray is the location of all groups that can be made from the tiles in the masterList
     exhaustiveList = ILP.generateSet(13,['R','B','K','Y'])
     xarray = np.zeros(len(exhaustiveList))
     for item in exhaustiveList:
@@ -37,18 +44,18 @@ def solver(currHand, currBoard):
             xarray[exhaustiveList.index(item)] += 1
         exHandStrings.extend(jokerCount*['J0'])
 
+    # makeablegroups is a list with all of the groups that can be made from the masterList
+    # the list has duplicates of everything to account for the presence of 2 of each tile in the game
     groupsFromHand = np.where(xarray==1)
     makeableGroups = 2*list(np.array(exhaustiveList)[groupsFromHand])
     makeableGroups.sort(key=checkLen,reverse=True)
-    # for item in makeableGroups:
-    #     print(*[x.string for x in item.group])
 
+    # this algorithm goes through each group and the following groups and determines the best
+    # set of groups to play to maximize the total number of tiles played
     bestPlay = []
     bestLen = 0
     bestChoice = []
     for i in range(len(makeableGroups)):
-        # handCopy = exampleHand.hand[:]
-        # handCopyStrings = [x.string for x in handCopy]
         boardCopy = []
         for item in currBoard:
             boardCopy.extend(item.group)
@@ -91,7 +98,7 @@ def solver(currHand, currBoard):
             bestLen = len(newsThese)
             bestPlay = masterList[:]
 
-    
+    # converts list of lists to list of groups
     groupsToAdd = []
     for currGroup in bestChoice:
         groupsToAdd.append(group(currGroup))

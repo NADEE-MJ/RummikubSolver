@@ -37,7 +37,6 @@ Jokers or J0 = has no value\n"""
     while True:
         gameOver = False
         numPlayers = input("How many people are playing? (2, 3, or 4) ")
-        #numPlayers = 'solver' #for testing goingOutSolver
 
         if numPlayers in ['2', '3', '4']:
             players = [hand(d, i, False) for i in range(int(numPlayers))]
@@ -45,7 +44,6 @@ Jokers or J0 = has no value\n"""
         elif numPlayers == 'solver':
             os.system('cls' if os.name == 'nt' else 'clear')
             print("CHEAT CODE ENTERED\nRunning solver....")
-            #time.sleep(2)
             solver = hand(drawPile(), -1, True)
 
             boardInputed = False
