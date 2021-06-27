@@ -51,6 +51,15 @@ class board():
         print('\n',end='')
 
         #print(*['[{}]'.format(', '.join(selectedGroup)) for selectedGroup in self.selection], sep='\n')
+
+    def selectAllGroups(self):
+        """
+        Select all groups on board
+        """
+        self.selection = self.board[:]
+        self.removeGroups(self.selection)
+
+        return self.selection
     
     def reinsertSelection(self):
         '''

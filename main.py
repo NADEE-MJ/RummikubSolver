@@ -4,6 +4,7 @@ from drawpile import drawPile
 from board import board
 from group import group
 from tile import colors
+from solver import solver as dannySolver
 import os
 import time
 
@@ -17,7 +18,7 @@ def main():
 MENU
 1. Play Tiles
 2. End Turn
-3. Solve
+3. Solve()
 Enter: """
 
     colorKey = f"Color Key:\n{colors.colorsDict['R']}R = Red \n\
@@ -139,8 +140,7 @@ Jokers or J0 = has no value\n"""
                             player.draw(d)
                         break
                     elif userChoice == '3':
-                        #solver
-                        #NEED TO CREATE SOLVER FIRST
+                        #goingOutSolver
                         os.system('cls' if os.name == 'nt' else 'clear')
                         b.displayBoard()
                         player.displayHand()
@@ -150,8 +150,20 @@ Jokers or J0 = has no value\n"""
                             player.removeItemsFromHand(tilesToRemove)
                             b.displayBoard()
                             player.displayHand()
-                        gameOver = True
                         continue
+                    elif userChoice == '4':
+                        #solver
+                        os.system('cls' if os.name == 'nt' else 'clear')
+                        b.displayBoard()
+                        player.displayHand()
+                        groupsToAdd, newHand = dannySolver(player.hand, b.selectAllGroups())
+                        if groupsToAdd != None:
+                            b.addGroups(groupsToAdd)
+                            player.hand = newHand
+                            b.displayBoard()
+                            player.displayHand()
+                        else:
+                            b.reinsertSelection()
                     else:
                         print('"{}" is not an option!\n'.format(userChoice))
 

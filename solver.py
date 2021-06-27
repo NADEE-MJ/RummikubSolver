@@ -1,4 +1,5 @@
 import numpy as np
+from group import group
 import ILP
 
 def checkLen(elem):
@@ -36,19 +37,13 @@ def solver(currHand, currBoard):
             xarray[exhaustiveList.index(item)] += 1
         exHandStrings.extend(jokerCount*['J0'])
 
-
-
-
     groupsFromHand = np.where(xarray==1)
     makeableGroups = 2*list(np.array(exhaustiveList)[groupsFromHand])
     makeableGroups.sort(key=checkLen,reverse=True)
-    for item in makeableGroups:
-        print(*[x.string for x in item.group])
+    # for item in makeableGroups:
+    #     print(*[x.string for x in item.group])
 
-
-
-
-
+    bestPlay = []
     bestLen = 0
     bestChoice = []
     for i in range(len(makeableGroups)):
@@ -94,8 +89,14 @@ def solver(currHand, currBoard):
         if boardCheck and bestLen < len(newsThese):
             bestChoice = useThese[:]
             bestLen = len(newsThese)
-            bestPlay = masterStrings[:]
-                
+            bestPlay = masterList[:]
+
     
-    for item in bestChoice:
-        print([x.string for x in item])
+    groupsToAdd = []
+    for currGroup in bestChoice:
+        groupsToAdd.append(group(currGroup))
+    
+    if len(groupsToAdd) == 0:
+        return None, bestPlay
+
+    return groupsToAdd, bestPlay
