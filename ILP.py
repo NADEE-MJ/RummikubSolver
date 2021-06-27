@@ -2,6 +2,14 @@ from itertools import combinations
 from group import group
 from tile import tile
 
+def checkListDup(a, b):
+    if len(a) != len(b):
+        return False
+    for i in range(len(a)):
+        if a[i].color != b[i].color or a[i].value != b[i].value:
+            return False
+    return True
+
 def generateNoJokerSet(highestNum, colors):
     noJokerSet = []
     for color in colors:
@@ -11,7 +19,7 @@ def generateNoJokerSet(highestNum, colors):
                 noJokerSet.append(group([tile(i-3, color), tile(i-2, color), tile(i-1, color), tile(i, color)]))
             if i > 4:
                 noJokerSet.append(group([tile(i-4, color), tile(i-3, color), tile(i-2, color), tile(i-1, color), tile(i, color)]))
-    
+ 
     colorCombinationsList = []
     for i in range(3, len(colors) + 1):
         colorCombinations = list(combinations(colors, i))
@@ -42,7 +50,19 @@ def generateTwoJokerSet(oneJokerSet):
             if party.group[i].color != 'J':
                 partyCopy = party.group[:]
                 partyCopy[i] = tile(0, 'J')
-                twoJokerSet.append(group(partyCopy))
+                foundDup = False
+                
+                if len(twoJokerSet) == 0:
+                    twoJokerSet.append(group(partyCopy))
+ 
+                for j in twoJokerSet:
+                    if checkListDup(partyCopy, j.group):
+                        foundDup = True
+                        break
+
+                if not foundDup:
+                    twoJokerSet.append(group(partyCopy))
+
     return twoJokerSet
 
 def generateSet(highestNum, colors):
@@ -55,8 +75,6 @@ def generateSet(highestNum, colors):
     return bigSet
 
 big_set = generateSet(13,['R','B','K','Y'])
-
-# big_set = generateTwoJokerSet(generateOneJokerSet(generateNoJokerSet(13,['R','B','K','Y'])))
 
 for i in big_set:
     print(*[x.cstring for x in i.group])
