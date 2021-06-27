@@ -50,8 +50,8 @@ Jokers or J0 = has no value\n"""
 
             boardInputed = False
             for i in range(106):
-                    solver.draw(d)
-            while True:
+                solver.draw(d)
+            while not gameOver:
                 if not boardInputed:
                     solverBoard = input("Enter your board in the following format: (R1 R2 R3 | R4 B4 Y4) ")
                     if not solverBoard == '':
@@ -71,14 +71,31 @@ Jokers or J0 = has no value\n"""
                     continue
                 else:
                     solver.displayHand()
-                    solverGoingOutGroups, tilesToRemove = goingOutSolver(solver.hand)
-                    if not solverGoingOutGroups == None:
-                        b.addGroups(solverGoingOutGroups)
-                        solver.removeItemsFromHand(tilesToRemove)
-                        b.displayBoard()
-                        solver.displayHand()
-                    gameOver = True
-                    break
+                    while True:
+                        solverPrefence = input("Which solver do you want to use? (GoingOutSolver == 'g' and Solver == 's')")
+                        if solverPrefence in  ['g', 'G']:
+                            solverGoingOutGroups, tilesToRemove = goingOutSolver(solver.hand)
+                            if not solverGoingOutGroups == None:
+                                b.addGroups(solverGoingOutGroups)
+                                solver.removeItemsFromHand(tilesToRemove)
+                                b.displayBoard()
+                                solver.displayHand()
+                            gameOver = True
+                            break
+                        elif solverPrefence in ['s', 'S']:
+                            groupsToAdd, newHand = dannySolver(solver.hand, b.selectAllGroups())
+                            if groupsToAdd != None:
+                                b.addGroups(groupsToAdd)
+                                solver.hand = newHand
+                                b.displayBoard()
+                                solver.displayHand()
+                            else:
+                                b.reinsertSelection()
+                            gameOver = True
+                            break
+                        else:
+                            print("That is not valid input!")
+                            continue
 
         else:
             print('\n"{}" is not valid input! Please input 2, 3, or 4!'.format(numPlayers))
