@@ -1,7 +1,7 @@
 from tile import tile
 from group import GroupError, InvalidJokerError, RunError, SetError, UniqueColorError, group
 class hand():
-    def __init__(self, drawPile, playerNum, customHand):
+    def __init__(self, drawPile, playerNum, customHand=False):
         '''
         Initialize a hand. Hand is a list that contains tiles
         '''

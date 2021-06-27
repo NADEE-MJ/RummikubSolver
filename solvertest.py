@@ -1,4 +1,7 @@
+from drawpile import drawPile
 import numpy as np
+import ILP
+from hand import hand
 '''
 gather all of the tiles on the board and in your hand
 count them up 0 to 2 for each tile, recorded in y array
@@ -46,4 +49,26 @@ for i in ['R','B','Y','K']:
 tileToIndex.append('J0')
 tileToIndex = tuple(tileToIndex)
 
+exampleDraw = drawPile()
+exampleHand = hand(exampleDraw,1)
 
+exHandStrings = [x.string for x in exampleHand.hand]
+
+exhaustiveList = ILP.generateSet(13,['R','B','K','Y'])
+xarray = np.zeros(len(exhaustiveList))
+for item in exhaustiveList:
+    jokerCount = 0
+    tileCounter = 0
+    for el in item.group:
+        if el.string in exHandStrings:
+            tileCounter += 1
+            if el.string == 'J0':
+                exHandStrings.remove('J0')
+                jokerCount += 1
+    if tileCounter == len(item.group):
+        xarray[exhaustiveList.index(item)] += 1
+    exHandStrings.extend(jokerCount*['J0'])
+
+print(exHandStrings)
+print(xarray)
+# print(exhaustiveList)
