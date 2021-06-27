@@ -42,12 +42,12 @@ subject to: Sum of s[i][j]x[j] == t[i] + y[i]
 
 source: doi:10.1093/comjnl/bxl033
 '''
-tileToIndex = []
-for i in ['R','B','Y','K']:
-    for j in range(13):
-        tileToIndex.append(i+str(j+1))
-tileToIndex.append('J0')
-tileToIndex = tuple(tileToIndex)
+# tileToIndex = []
+# for i in ['R','B','Y','K']:
+#     for j in range(13):
+#         tileToIndex.append(i+str(j+1))
+# tileToIndex.append('J0')
+# tileToIndex = tuple(tileToIndex)
 
 exampleDraw = drawPile()
 exampleHand = hand(exampleDraw,1)
